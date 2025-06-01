@@ -12,21 +12,25 @@ function RoomsContent() {
   const [averageRatings, setAverageRatings] = useState({}); // Lưu điểm trung bình của từng khách sạn
   const hotelsPerPage = 3;
 
+
+  const API_URL = process.env.REACT_APP_API_URL;
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         setError(false);
-        const response = await axios.get("/api/hotels");
+        const response = await axios.get(`${API_URL}/api/hotels`);
         const hotelsData = response.data;
         setHotels(hotelsData);
 
         // Lấy điểm trung bình cho từng khách sạn
-        const ratings = {};
+     const ratings = {};
         await Promise.all(
           hotelsData.map(async (hotel) => {
             try {
-              const ratingResponse = await axios.get("/api/reviews/average", {
+              const ratingResponse = await axios.get(`${API_URL}/api/reviews/average`, { // Sửa
                 params: { hotelId: hotel._id },
               });
               ratings[hotel._id] = ratingResponse.data;

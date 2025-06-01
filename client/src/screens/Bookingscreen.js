@@ -11,6 +11,10 @@ import SuggestionCard from "../components/SuggestionCard";
 import AlertMessage from "../components/AlertMessage";
 import { Carousel } from "react-bootstrap";
 
+
+const API_URL = process.env.REACT_APP_API_URL; 
+
+
 // Định nghĩa danh sách dịch vụ có sẵn
 const availableServices = [
   { id: "breakfast", name: "Bữa sáng", price: 100000 },
@@ -106,70 +110,68 @@ function Bookingscreen() {
 
   // Hàm lấy dữ liệu phòng
   const fetchRoomData = useCallback(async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.post("/api/rooms/getroombyid", { roomid });
-      setRoom(data);
-      setValue("roomType", data.type || "");
-      if (data.availabilityStatus !== "available") {
-        await fetchSuggestions(data._id, data.type);
-      }
-      // Tính tổng tiền ban đầu (chưa bao gồm dịch vụ)
-      const checkin = new Date(data.checkin || new Date());
-      const checkout = new Date(data.checkout || new Date());
-      const days = Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
-      setTotalAmount(data.rentperday * days);
-    } catch (error) {
-      setError(true);
-    } finally {
-      setLoading(false);
+  try {
+    setLoading(true);
+    const { data } = await axios.post(`${API_URL}/api/rooms/getroombyid`, { roomid }); // Sửa
+    setRoom(data);
+    setValue("roomType", data.type || "");
+    if (data.availabilityStatus !== "available") {
+      await fetchSuggestions(data._id, data.type);
     }
-  }, [roomid, setValue]);
+    const checkin = new Date(data.checkin || new Date());
+    const checkout = new Date(data.checkout || new Date());
+    const days = Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
+    setTotalAmount(data.rentperday * days);
+  } catch (error) {
+    setError(true);
+  } finally {
+    setLoading(false);
+  }
+}, [roomid, setValue]);
 
-  // Hàm lấy gợi ý phòng
-  const fetchSuggestions = useCallback(async (roomId, roomType) => {
-    try {
-      setLoadingSuggestions(true);
-      const response = await axios.get("/api/rooms/suggestions", {
-        params: { roomId, roomType },
-      });
-      setSuggestions(response.data);
-    } catch (error) {
-      console.error("Lỗi khi lấy phòng gợi ý:", error);
-    } finally {
-      setLoadingSuggestions(false);
-    }
-  }, []);
+const fetchSuggestions = useCallback(async (roomId, roomType) => {
+  try {
+    setLoadingSuggestions(true);
+    const response = await axios.get(`${API_URL}/api/rooms/suggestions`, { // Sửa
+      params: { roomId, roomType },
+    });
+    setSuggestions(response.data);
+  } catch (error) {
+    console.error("Lỗi khi lấy phòng gợi ý:", error);
+  } finally {
+    setLoadingSuggestions(false);
+  }
+}, []);
 
   const accumulatePoints = useCallback(async (bookingId) => {
-    try {
-      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-      if (!userInfo || !userInfo.token) {
-        return { success: false, message: "Vui lòng đăng nhập để tích điểm" };
-      }
-
-      const config = {
-        headers: { Authorization: `Bearer ${userInfo.token}` },
-      };
-
-      const bookingCheck = await axios.get(`/api/bookings/${bookingId}`, config);
-      if (bookingCheck.data.status !== "confirmed" || bookingCheck.data.paymentStatus !== "paid") {
-        return { success: false, message: "Đặt phòng chưa đủ điều kiện để tích điểm" };
-      }
-
-      const response = await axios.post("/api/bookings/checkout", { bookingId }, config);
-      return {
-        success: true,
-        pointsEarned: response.data.pointsEarned,
-        totalPoints: response.data.totalPoints,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data?.message || "Lỗi khi tích điểm",
-      };
+  try {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    if (!userInfo || !userInfo.token) {
+      return { success: false, message: "Vui lòng đăng nhập để tích điểm" };
     }
-  }, []);
+
+    const config = {
+      headers: { Authorization: `Bearer ${userInfo.token}` },
+    };
+
+    const bookingCheck = await axios.get(`${API_URL}/api/bookings/${bookingId}`, config); // Sửa
+    if (bookingCheck.data.status !== "confirmed" || bookingCheck.data.paymentStatus !== "paid") {
+      return { success: false, message: "Đặt phòng chưa đủ điều kiện để tích điểm" };
+    }
+
+    const response = await axios.post(`${API_URL}/api/bookings/checkout`, { bookingId }, config); // Sửa
+    return {
+      success: true,
+      pointsEarned: response.data.pointsEarned,
+      totalPoints: response.data.totalPoints,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response?.data?.message || "Lỗi khi tích điểm",
+    };
+  }
+}, []);
 
   // Hàm áp dụng mã giảm giá
   const applyDiscountCode = async () => {

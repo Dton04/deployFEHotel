@@ -9,6 +9,9 @@ import SuggestionCard from "../components/SuggestionCard";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 function Room({ room }) {
   const [show, setShow] = useState(false);
   const [reviews, setReviews] = useState([]);
@@ -47,7 +50,7 @@ function Room({ room }) {
       const config = {
         headers: { Authorization: `Bearer ${userInfo.token}` },
       };
-      const response = await axios.get('/api/favorites', config);
+     const response = await axios.get(`${API_URL}/api/favorites`, config);
       const isFav = response.data.some((favRoom) => favRoom._id.toString() === room._id);
       setIsFavorite(isFav);
     } catch (error) {
@@ -68,11 +71,11 @@ function Room({ room }) {
         headers: { Authorization: `Bearer ${userInfo.token}` },
       };
       if (isFavorite) {
-        await axios.delete(`/api/favorites/${room._id}`, config);
+        await axios.delete(`${API_URL}/api/favorites/${room._id}`, config);
         toast.success('Đã xóa phòng khỏi danh sách yêu thích');
         setIsFavorite(false);
       } else {
-        await axios.post('/api/favorites', { roomId: room._id }, config);
+       await axios.post(`${API_URL}/api/favorites`, { roomId: room._id }, config);
         toast.success('Đã thêm phòng vào danh sách yêu thích');
         setIsFavorite(true);
       }
@@ -110,7 +113,7 @@ function Room({ room }) {
       if (isAdminOrStaff) {
         config.headers = { Authorization: `Bearer ${userInfo.token}` };
       }
-      const response = await axios.get("/api/reviews", config);
+      const response = await axios.get(`${API_URL}/api/reviews`, config);
       setReviews(response.data.reviews || []);
     } catch (error) {
       console.error("Lỗi khi lấy đánh giá:", error);
@@ -125,7 +128,7 @@ function Room({ room }) {
       const config = {
         headers: { Authorization: `Bearer ${userInfo.token}` },
       };
-      const response = await axios.patch(`/api/reviews/${reviewId}/toggle-hidden`, {}, config);
+      const response = await axios.patch(`${API_URL}/api/reviews/${reviewId}/toggle-hidden`, {}, config);
       toast.success(response.data.message);
       fetchReviews();
     } catch (error) {
@@ -143,7 +146,7 @@ function Room({ room }) {
     if (room.availabilityStatus !== "available") {
       try {
         setLoadingSuggestions(true);
-        const response = await axios.get("/api/rooms/suggestions", {
+       const response = await axios.get(`${API_URL}/api/rooms/suggestions`, {
           params: { roomId: room._id, roomType: room.type },
         });
         setSuggestions(response.data);
@@ -161,7 +164,7 @@ function Room({ room }) {
   useEffect(() => {
     const fetchAverageRating = async () => {
       try {
-        const response = await axios.get("/api/reviews/average", {
+       const response = await axios.get(`${API_URL}/api/reviews/average`, {
           params: { hotelId: room.hotelId },
         });
         setAverageRating(response.data);
