@@ -1,0 +1,261 @@
+.booking-page {
+  padding: 64px 0 40px;
+  min-height: 100vh;
+  background: linear-gradient(120deg, #f8f5ef 45%, #fffdf8 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+  max-width: 1150px;
+  margin: auto;
+  padding: 0 20px;
+}
+
+.booking-header {
+  margin-bottom: 38px;
+  text-align: center;
+}
+.booking-header .subtitle {
+  font-size: 1.1rem;
+  color: #b9935a;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.booking-header .subtitle .line {
+  width: 40px;
+  height: 2.2px;
+  background: #b9935a;
+  margin: 0 12px;
+  border-radius: 2px;
+  opacity: 0.3;
+}
+.booking-header .title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #22201c;
+  text-shadow: 0 3px 8px rgba(200,170,90,0.10);
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+.booking-header .title span {
+  color: #b9935a;
+  text-shadow: 0 3px 10px rgba(185,147,90,0.13);
+}
+
+/* Ảnh phòng dọc, bóng lớn */
+.booking-images-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.image-wrapper-vertical img.vertical-room-image {
+  width: 100%;
+  border-radius: 16px;
+  object-fit: cover;
+  height: 215px;
+  box-shadow: 0 6px 24px rgba(170,140,80,0.12);
+  border: 1px solid #eee9dc;
+  transition: transform 0.32s, box-shadow 0.28s;
+}
+.image-wrapper-vertical img.vertical-room-image:hover {
+  transform: scale(1.048);
+  box-shadow: 0 12px 38px rgba(200,160,70,0.18);
+}
+
+/* Wrapper form */
+.booking-screen-wrapper {
+  background: #fffdf8;
+  padding: 36px 34px 30px 34px;
+  border-radius: 18px;
+  box-shadow: 0 10px 36px rgba(181, 147, 90, 0.09), 0 2px 10px rgba(0,0,0,0.06);
+  margin-bottom: 27px;
+  animation: fadeIn 0.4s;
+  border: 1px solid #f0e6d7;
+}
+.booking-screen-wrapper h3 {
+  font-size: 1.32rem;
+  font-weight: 700;
+  color: #3d392b;
+  margin-bottom: 16px;
+  letter-spacing: 0.1px;
+}
+
+/* Label & input */
+.form-label {
+  font-weight: 600;
+  margin-bottom: 7px;
+  color: #45391e;
+  font-size: 1rem;
+  letter-spacing: 0.18px;
+}
+.form-control, .form-select {
+  border-radius: 8px;
+  border: 1.5px solid #e5d1a2;
+  padding: 12px 15px;
+  font-size: 1rem;
+  background: #f9f8f3;
+  transition: border-color 0.23s, box-shadow 0.18s;
+  box-shadow: none;
+}
+.form-control:focus, .form-select:focus {
+  border-color: #b9935a;
+  box-shadow: 0 0 0 2px rgba(185,147,90, 0.13);
+  outline: none;
+}
+
+textarea.form-control {
+  min-height: 84px;
+  resize: vertical;
+}
+
+.text-danger.small, .invalid-feedback {
+  font-size: 0.92rem;
+  color: #dc3545;
+  margin-top: 4px;
+}
+
+/* Nút đặt phòng */
+.btn-book-now, .btn.btn-primary.px-5 {
+  background: linear-gradient(90deg, #c59d5f 60%, #b9935a 100%);
+  color: #fff;
+  border: none;
+  font-weight: 700;
+  font-size: 1.13rem;
+  padding: 14px 0;
+  border-radius: 10px;
+  width: 65%;
+  margin-top: 17px;
+  transition: background 0.22s, box-shadow 0.21s;
+  box-shadow: 0 4px 14px rgba(185,147,90,0.09);
+  letter-spacing: 0.2px;
+}
+.btn-book-now:hover, .btn.btn-primary.px-5:hover {
+  background: linear-gradient(93deg, #a1783c 85%, #b9935a 100%);
+  color: #fff;
+  box-shadow: 0 7px 22px rgba(185,147,90,0.14);
+}
+
+.btn-danger {
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  border-radius: 8px;
+}
+
+.room-preview {
+  background: #fcfaf6;
+  border-radius: 13px;
+  box-shadow: 0 3px 13px rgba(210,190,160,0.10);
+  margin-top: 30px;
+  padding: 15px 18px 10px 10px;
+  border: 1px solid #f0e6d7;
+  transition: box-shadow 0.22s;
+}
+.room-preview:hover {
+  box-shadow: 0 8px 26px rgba(200,170,90,0.13);
+}
+.room-preview img {
+  border-radius: 11px;
+  object-fit: cover;
+  border: 1px solid #eee8dd;
+  box-shadow: 0 1.5px 8px rgba(185,147,90,0.10);
+}
+.room-preview h5 {
+  color: #b9935a;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.room-preview p {
+  margin-bottom: 5px;
+}
+
+.payment-status {
+  background: #f9f6ef;
+  border-radius: 8px;
+  padding: 8px 16px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 7px rgba(185,147,90,0.07);
+}
+.status-text {
+  font-weight: 700;
+  font-size: 1.01rem;
+  color: #392d17;
+}
+
+.bank-info {
+  background: #fffefb;
+  border-radius: 10px;
+  box-shadow: 0 2.5px 10px rgba(190,150,80,0.07);
+  border: 1px solid #faedd0;
+}
+.bank-info h4 {
+  color: #a1783c;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.points-earned {
+  background: linear-gradient(95deg, #c59d5f 70%, #b9935a 100%);
+  color: #fff;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 14px 16px;
+  box-shadow: 0 4px 14px rgba(185,147,90,0.13);
+  margin-bottom: 15px;
+}
+.points-earned h5 {
+  color: #fffbe9;
+  font-weight: 700;
+}
+
+.suggestions-container {
+  margin-top: 38px;
+  background: #fffdfa;
+  padding: 24px 18px 22px;
+  border-radius: 15px;
+  box-shadow: 0 4px 14px rgba(190,160,90,0.08);
+  border: 1px solid #f1e8d3;
+}
+.suggestions-container h5 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 17px;
+  color: #c59d5f;
+}
+
+@media (max-width: 768px) {
+  .booking-header .title { font-size: 1.45rem; }
+  .booking-screen-wrapper { padding: 13px 4px; }
+  .room-preview img { max-height: 115px; }
+  .btn-book-now, .btn.btn-primary.px-5 { width: 100%; }
+  .room-preview { margin-top: 11px; }
+}
+
+/* Animation fadeIn */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.services-list {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.services-list .form-check {
+  margin-bottom: 10px;
+}
+
+.services-list .form-check-label {
+  font-size: 16px;
+}
+
+.form-check-input{
+  max-width: 20px;
+}
