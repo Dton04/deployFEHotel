@@ -6,6 +6,9 @@ import Navbar from './Navbar';
 import '../css/UserManagement.css';
 import { useNavigate } from 'react-router-dom';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 function UserManagement() {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -17,7 +20,7 @@ function UserManagement() {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('/api/users/allusers', {
+      const response = await axios.get(`${API_URL}/api/users/allusers`, {
         headers: { Authorization: `Bearer ${userInfo?.token}` },
       });
       const userData = response.data;
@@ -64,7 +67,7 @@ function UserManagement() {
 
   const handleRemoveUser = async (userId) => {
     try {
-      await axios.delete(`/api/users/staff/${userId}`, {
+      await axios.delete(`${API_URL}/api/users/staff/${userId}`, {
         headers: { Authorization: `Bearer ${userInfo?.token}` },
       });
       message.success('User removed successfully');

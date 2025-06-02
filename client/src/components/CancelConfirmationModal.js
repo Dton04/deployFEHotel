@@ -3,6 +3,8 @@ import { Modal, Button, Alert, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import '../css/bookingscreen.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 function CancelConfirmationModal({ show, onClose, onConfirmSuccess, bookingId, bookingDetails }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -11,7 +13,7 @@ function CancelConfirmationModal({ show, onClose, onConfirmSuccess, bookingId, b
     try {
       setLoading(true);
       setError(null);
-      await axios.put(`/api/bookings/${bookingId}/cancel`);
+      await axios.put(`${API_URL}/api/bookings/${bookingId}/cancel`);
       onConfirmSuccess();
     } catch (err) {
       setError(err.response?.data?.message || 'Lỗi khi hủy đặt phòng. Vui lòng thử lại.');

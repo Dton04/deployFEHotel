@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 function ReviewChart({ hotelId }) {
   const [chartData, setChartData] = useState([]);
   const [averageRating, setAverageRating] = useState({ average: 0, totalReviews: 0 });
@@ -29,7 +32,7 @@ function ReviewChart({ hotelId }) {
           return;
         }
 
-        const response = await axios.get("/api/users/profile", {
+        const response = await axios.get(`${API_URL}/api/users/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const user = response.data;
@@ -57,11 +60,11 @@ function ReviewChart({ hotelId }) {
         setError(null);
 
         // Lấy điểm trung bình và tổng số đánh giá của khách sạn
-        const averageResponse = await axios.get("/api/reviews/average", { params: { hotelId } });
+        const averageResponse = await axios.get(`${API_URL}/api/reviews/average`, { params: { hotelId } });
         setAverageRating(averageResponse.data);
 
         // Lấy tất cả đánh giá của khách sạn
-        const reviewsResponse = await axios.get("/api/reviews", { 
+        const reviewsResponse = await axios.get(`${API_URL}/api/reviews`, { 
           params: { hotelId }
         });
         const reviews = reviewsResponse.data.reviews || [];

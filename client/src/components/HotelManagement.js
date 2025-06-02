@@ -4,6 +4,10 @@ import axiosInstance from './axiosInstance';
 import { Link } from 'react-router-dom';
 import '../css/hotelManagement.css';
 
+
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 function HotelManagement() {
   const [hotels, setHotels] = useState([]);
   const [regions, setRegions] = useState([]);

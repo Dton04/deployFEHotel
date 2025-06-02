@@ -3,9 +3,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../css/auth.css';
 
-const API_URL = process.env.REACT_APP_API_URL;
-
-
 function Registerscreen() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -39,7 +36,7 @@ function Registerscreen() {
 
     try {
       setLoading(true);
-      const response = await axios.post(`${API_URL}/api/users/register`, { 
+      const response = await axios.post('/api/users/register', { 
         name, 
         email, 
         password, 
@@ -60,13 +57,6 @@ function Registerscreen() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleGoogleRegister = () => {
-    // Gửi yêu cầu đến server để khởi động flow OAuth
-    window.location.href = `${process.env.REACT_APP_API_URL}/api/users/google`;
-    // Hoặc nếu dùng proxy trong package.json:
-    // window.location.href = '/api/users/google';
   };
 
   return (
@@ -155,14 +145,6 @@ function Registerscreen() {
             {loading ? 'Đang đăng ký...' : 'Đăng Ký'}
           </button>
         </form>
-
-        <button
-          className="btn btn-google"
-          onClick={handleGoogleRegister}
-          disabled={loading}
-        >
-          Đăng Ký Bằng Google
-        </button>
 
         <div className="links">
           <p>

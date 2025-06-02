@@ -5,6 +5,9 @@ import { Bar, Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
 import '../css/userStats.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 // Đăng ký các thành phần của Chart.js
 ChartJS.register(ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -29,10 +32,10 @@ const UserStats = () => {
 
       // Gọi đồng thời API để lấy đặt phòng và đánh giá
       const [bookingResponse, reviewResponse] = await Promise.all([
-        axios.get('http://localhost:5000/api/bookings', {
+        axios.get(`${API_URL}/api/bookings`, {
           params: { email: userInfo.email.toLowerCase() },
         }),
-        axios.get('http://localhost:5000/api/reviews/by-email', {
+        axios.get(`${API_URL}/api/reviews/by-email`, {
           params: { email: userInfo.email.toLowerCase() },
         }),
       ]);

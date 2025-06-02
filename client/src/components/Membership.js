@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../css/membership.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const Membership = () => {
   const [membershipData, setMembershipData] = useState(null);
   const [pointsData, setPointsData] = useState(null);
@@ -25,19 +27,19 @@ const Membership = () => {
 
     const fetchMembershipData = async () => {
       try {
-        const membershipResponse = await axios.get(`/api/users/membership/level/${userInfo._id}`, {
+        const membershipResponse = await axios.get(`${API_URL}/api/users/membership/level/${userInfo._id}`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
-        const pointsResponse = await axios.get('/api/users/points', {
+        const pointsResponse = await axios.get(`${API_URL}/api/users/points`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
-        const benefitsResponse = await axios.get(`/api/users/membership/benefits/${userInfo._id}`, {
+        const benefitsResponse = await axios.get(`${API_URL}/api/users/membership/benefits/${userInfo._id}`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
-        const accumulatedResponse = await axios.get('/api/discounts/accumulated', {
+        const accumulatedResponse = await axios.get(`${API_URL}/api/discounts/accumulated`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
-        const rewardsResponse = await axios.get('/api/rewards', {
+        const rewardsResponse = await axios.get(`${API_URL}/api/rewards`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
 
@@ -67,12 +69,12 @@ const Membership = () => {
 
     try {
       const response = await axios.post(
-        '/api/rewards/redeem',
+        `${API_URL}/api/rewards/redeem`,
         { rewardId, userId: userInfo._id },
         { headers: { Authorization: `Bearer ${userInfo.token}` } }
       );
       alert('Đổi thưởng thành công! Mã voucher: ' + response.data.voucherCode);
-      const pointsResponse = await axios.get('/api/users/points', {
+      const pointsResponse = await axios.get(`${API_URL}/api/users/points`, {
         headers: { Authorization: `Bearer ${userInfo.token}` },
       });
       setPointsData(pointsResponse.data || { points: 0, recentTransactions: [] });
@@ -85,7 +87,7 @@ const Membership = () => {
     try {
       const bookingId = 'YOUR_BOOKING_ID'; // Thay bằng logic lấy bookingId thực tế
       const response = await axios.post(
-        '/api/discounts/apply',
+        `${API_URL}/api/discounts/apply`,
         { bookingData: { bookingId }, identifiers: [discountId] },
         { headers: { Authorization: `Bearer ${userInfo.token}` } }
       );

@@ -6,6 +6,9 @@ import Room from './Room';
 import { Container, Alert, Spinner } from 'react-bootstrap';
 import '../css/rooms-content.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 function Favorites() {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -25,7 +28,7 @@ function Favorites() {
         const config = {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         };
-        const response = await axios.get('/api/favorites', config);
+        const response = await axios.get(`${API_URL}/api/favorites`, config);
         setFavorites(response.data);
       } catch (error) {
         setError(error.response?.data?.message || 'Lỗi khi tải danh sách yêu thích');

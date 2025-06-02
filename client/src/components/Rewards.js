@@ -6,6 +6,9 @@ import '../css/rewards.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaStar, FaGift, FaHistory, FaTicketAlt } from 'react-icons/fa';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 const Rewards = () => {
   const [rewards, setRewards] = useState([]);
   const [userPoints, setUserPoints] = useState(0);
@@ -25,7 +28,7 @@ const Rewards = () => {
       if (!token) throw new Error('Vui lòng đăng nhập để xem ưu đãi');
 
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const { data } = await axios.get('/api/rewards', config);
+      const { data } = await axios.get(`${API_URL}/api/rewards`, config);
       setRewards(data.rewards);
       setUserPoints(data.userPoints);
       setMembershipLevel(data.membershipLevel);
@@ -45,7 +48,7 @@ const Rewards = () => {
       if (!token) return;
 
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const { data } = await axios.get('/api/rewards/history', config);
+      const { data } = await axios.get(`${API_URL}/api/rewards/history`, config);
       setHistory(data);
     } catch (error) {
       toast.error(error.response?.data?.message || 'Lỗi khi tải lịch sử đổi thưởng');
@@ -61,7 +64,7 @@ const Rewards = () => {
       if (!token) return;
 
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const { data } = await axios.get('/api/rewards/vouchers', config);
+      const { data } = await axios.get(`${API_URL}/api/rewards/vouchers`, config);
       setVouchers(data);
     } catch (error) {
       toast.error(error.response?.data?.message || 'Lỗi khi tải danh sách voucher');
@@ -78,7 +81,7 @@ const Rewards = () => {
       if (!token) throw new Error('Vui lòng đăng nhập để đổi ưu đãi');
 
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const { data } = await axios.post('/api/rewards/redeem', { rewardId }, config);
+      const { data } = await axios.post(`${API_URL}/api/rewards/redeem`, { rewardId }, config);
       const reward = rewards.find(r => r._id === rewardId);
       
       // Enhanced success notification

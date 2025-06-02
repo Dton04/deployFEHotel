@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Rate, Input, Select, Button, Alert, Spin } from "antd";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -23,7 +26,7 @@ const RatingForm = ({ hotels, onSubmit, onCancel }) => {
       const fetchRooms = async () => {
         try {
           setFormLoading(true);
-          const response = await axios.get(`/api/hotels/${selectedHotel}/rooms`);
+          const response = await axios.get(`${API_URL}/api/hotels/${selectedHotel}/rooms`);
           const roomsData = response.data.rooms || response.data || [];
           if (Array.isArray(roomsData)) {
             setRooms(roomsData);
@@ -102,7 +105,7 @@ const RatingForm = ({ hotels, onSubmit, onCancel }) => {
         roomIds = [selectedRoom];
       }
 
-      const bookingCheckResponse = await axios.get(`/api/bookings/check`, {
+      const bookingCheckResponse = await axios.get(`${API_URL}/api/bookings/check`, {
   params: {
     email: formData.userEmail.toLowerCase(),
     roomId: selectedRoom || undefined, // truyền roomId trực tiếp

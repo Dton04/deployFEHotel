@@ -4,6 +4,9 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../css/reviewManagement.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 const ReviewManagement = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,7 +32,7 @@ const ReviewManagement = () => {
         status: filters.status === 'all' ? undefined : filters.status,
       };
 
-      const response = await axios.get('/api/reviews', { params, ...config });
+      const response = await axios.get(`${API_URL}/api/reviews`, { params, ...config });
       setReviews(response.data.reviews);
       setTotalPages(response.data.totalPages);
       setLoading(false);
@@ -60,7 +63,7 @@ const ReviewManagement = () => {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
 
-      const response = await axios.patch(`/api/reviews/${reviewId}/toggle-hidden`, {}, config);
+      const response = await axios.patch(`${API_URL}/api/reviews/${reviewId}/toggle-hidden`, {}, config);
       toast.success(response.data.message);
       fetchReviews();
     } catch (err) {
@@ -75,7 +78,7 @@ const ReviewManagement = () => {
         const userInfo = JSON.parse(localStorage.getItem('userInfo'));
         const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
 
-        const response = await axios.delete(`/api/reviews/${reviewId}`, config);
+        const response = await axios.delete(`${API_URL}/api/reviews/${reviewId}`, config);
         toast.success(response.data.message);
         fetchReviews();
       } catch (err) {

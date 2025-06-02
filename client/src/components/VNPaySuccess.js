@@ -4,6 +4,9 @@ import axios from 'axios';
 import { Alert, Spinner } from 'react-bootstrap';
 import '../css/bookingscreen.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 const VNPaySuccess = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -22,7 +25,7 @@ const VNPaySuccess = () => {
         }
 
         setLoading(true);
-        const response = await axios.get(`/api/bookings/${bookingId}`);
+        const response = await axios.get(`${API_URL}/api/bookings/${bookingId}`);
         setBooking(response.data);
       } catch (err) {
         setError(err.response?.data?.message || 'Lỗi khi tải thông tin đặt phòng.');

@@ -4,6 +4,9 @@ import axios from 'axios';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import '../css/CreateRoomForm.css'; // File CSS tùy chỉnh nếu cần
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 const CreateRoomForm = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -27,7 +30,7 @@ const CreateRoomForm = () => {
   useEffect(() => {
     const fetchHotels = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/hotels');
+        const response = await axios.get(`${API_URL}/api/hotels`);
         setHotels(response.data);
       } catch (err) {
         setError('Lỗi khi lấy danh sách khách sạn');
@@ -72,7 +75,7 @@ const CreateRoomForm = () => {
         },
       };
 
-      const response = await axios.post('http://localhost:5000/api/rooms', dataToSubmit, config);
+      const response = await axios.post(`${API_URL}/api/rooms`, dataToSubmit, config);
       setSuccess('Tạo phòng mới thành công!');
       setFormData({
         name: '',

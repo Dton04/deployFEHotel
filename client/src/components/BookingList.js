@@ -5,6 +5,8 @@ import { Alert, Spinner } from 'react-bootstrap';
 import CancelConfirmationModal from '../components/CancelConfirmationModal';
 import '../css/bookingscreen.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 function BookingList() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,7 +24,7 @@ function BookingList() {
           setError('Vui lòng cung cấp email để xem lịch sử đặt phòng.');
           return;
         }
-        const response = await axios.get('/api/bookings', { params: { email } });
+        const response = await axios.get(`${API_URL}/api/bookings`, { params: { email } });
         setBookings(response.data);
       } catch (err) {
         setError(err.response?.data?.message || 'Lỗi khi tải danh sách đặt phòng.');

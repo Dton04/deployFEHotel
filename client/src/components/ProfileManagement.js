@@ -31,14 +31,14 @@ function ProfileManagement() {
     return JSON.parse(localStorage.getItem('userInfo'));
   }, []);
 
-  const API_BASE_URL = 'http://localhost:5000';
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const fetchUserProfile = async () => {
     try {
       if (!userInfo || !userInfo.token) {
         throw new Error('No token found');
       }
-      const response = await axios.get(`${API_BASE_URL}/api/users/profile`, {
+      const response = await axios.get(`${API_URL}/api/users/profile`, {
         headers: { Authorization: `Bearer ${userInfo.token}` },
       });
       setUser({
@@ -111,7 +111,7 @@ function ProfileManagement() {
     try {
       setUploadLoading(true);
       const response = await axios.put(
-        `${API_BASE_URL}/api/users/profile`,
+        `${API_URL}/api/users/profile`,
         { avatar: '' },
         {
           headers: {
@@ -143,14 +143,14 @@ function ProfileManagement() {
         formData.append('name', user.name);
         formData.append('phone', user.phone);
         formData.append('avatar', newAvatar);
-        response = await axios.put(`${API_BASE_URL}/api/users/profile`, formData, {
+        response = await axios.put(`${API_URL}/api/users/profile`, formData, {
           headers: {
             Authorization: `Bearer ${userInfo?.token}`,
           },
         });
       } else {
         response = await axios.put(
-          `${API_BASE_URL}/api/users/profile`,
+          `${API_URL}/api/users/profile`,
           { name: user.name, phone: user.phone },
           {
             headers: {
@@ -216,7 +216,7 @@ function ProfileManagement() {
         newPassword,
       };
       const response = await axios.put(
-        `${API_BASE_URL}/api/users/profile`,
+        `${API_URL}/api/users/profile`,
         updateData,
         {
           headers: {

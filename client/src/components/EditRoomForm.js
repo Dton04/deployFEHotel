@@ -41,7 +41,7 @@ const EditRoomForm = () => {
         };
 
         const response = await axios.post(
-          'http://localhost:5000/api/rooms/getroombyid',
+          `${API_URL}/api/rooms/getroombyid`,
           { roomid: id },
           config
         );
@@ -112,7 +112,7 @@ const EditRoomForm = () => {
         },
       };
 
-      const response = await axios.put(`http://localhost:5000/api/rooms/${id}`, dataToSubmit, config);
+      const response = await axios.put(`${API_URL}/api/rooms/${id}`, dataToSubmit, config);
       setSuccess('Cập nhật phòng thành công!');
       setTimeout(() => navigate('/admin/rooms'), 2000);
     } catch (err) {

@@ -4,6 +4,9 @@ import { useNavigate, Link } from "react-router-dom";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 import "../css/historybooking.css";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 function HistoryBookings() {
   const [bookings, setBookings] = useState([]);
   const [filteredBookings, setFilteredBookings] = useState([]);
@@ -39,7 +42,7 @@ function HistoryBookings() {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(`/api/bookings?email=${userEmail}`);
+      const response = await axios.get(`${API_URL}/api/bookings?email=${userEmail}`);
       const userBookings = response.data.filter(
         (booking) => booking.email === userEmail
       );
@@ -98,7 +101,7 @@ function HistoryBookings() {
     try {
       setLoading(true);
       setCancelError(null);
-      await axios.put(`/api/bookings/${selectedBookingId}/cancel`, {
+      await axios.put(`${API_URL}/api/bookings/${selectedBookingId}/cancel`, {
         cancelReason,
       });
       await fetchBookings();
@@ -162,7 +165,7 @@ function HistoryBookings() {
         return;
       }
 
-      await axios.put(`/api/bookings/${selectedBookingId}/update`, {
+      await axios.put(`${API_URL}/api/bookings/${selectedBookingId}/update`, {
         checkin: editBooking.checkin,
         checkout: editBooking.checkout,
         adults: Number(editBooking.adults),
@@ -184,7 +187,7 @@ function HistoryBookings() {
   const handleViewCancelReason = async (bookingId) => {
     try {
       const response = await axios.get(
-        `/api/bookings/cancel-reason?bookingId=${bookingId}`
+        `${API_URL}/api/bookings/cancel-reason?bookingId=${bookingId}`
       );
       alert(`Lý do hủy: ${response.data.cancelReason}`);
     } catch (err) {

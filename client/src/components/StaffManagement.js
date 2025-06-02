@@ -6,6 +6,9 @@ import Navbar from './Navbar';
 import '../css/StaffManagement.css';
 import { useNavigate } from 'react-router-dom';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 function StaffManagement() {
   const [staff, setStaff] = useState([]);
   const [filteredStaff, setFilteredStaff] = useState([]);
@@ -22,7 +25,7 @@ function StaffManagement() {
 
   const fetchStaff = async () => {
     try {
-      const response = await axios.get('/api/users/staff', {
+      const response = await axios.get(`${API_URL}/api/users/staff`, {
         headers: { Authorization: `Bearer ${userInfo?.token}` },
       });
       const staffData = response.data;
@@ -75,7 +78,7 @@ function StaffManagement() {
         password: values.password.trim(),
       };
 
-      await axios.post('/api/users/staff', trimmedValues, {
+      await axios.post(`${API_URL}/api/users/staff`, trimmedValues, {
         headers: { Authorization: `Bearer ${userInfo?.token}` },
       });
       message.success('Staff created successfully');
@@ -95,7 +98,7 @@ function StaffManagement() {
         password: values.password.trim(),
       };
 
-      await axios.put(`/api/users/staff/${selectedStaff._id}`, trimmedValues, {
+      await axios.put(`${API_URL}/api/users/staff/${selectedStaff._id}`, trimmedValues, {
         headers: { Authorization: `Bearer ${userInfo?.token}` },
       });
       message.success('Staff updated successfully');
@@ -110,7 +113,7 @@ function StaffManagement() {
 
   const handleRemoveStaff = async (userId) => {
     try {
-      await axios.delete(`/api/users/staff/${userId}`, {
+      await axios.delete(`${API_URL}/api/users/staff/${userId}`, {
         headers: { Authorization: `Bearer ${userInfo?.token}` },
       });
       message.success('Staff removed successfully');
