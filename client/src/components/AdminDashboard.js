@@ -7,6 +7,9 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import '../css/dashboard.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels);
 
 function AdminDashboard() {
@@ -33,9 +36,9 @@ function AdminDashboard() {
       try {
         setLoading(true);
         const [overviewResponse, dailyResponse, monthlyResponse] = await Promise.all([
-          axios.get('/api/dashboard/overview'),
-          axios.get('/api/bookings/stats/daily'),
-          axios.get('/api/bookings/stats/monthly'),
+          axios.get(`${API_URL}/api/dashboard/overview`),
+          axios.get(`${API_URL}/api/bookings/stats/daily`),
+          axios.get(`${API_URL}/api/bookings/stats/monthly`),
         ]);
         setStats(overviewResponse.data);
         setDailyRevenue(dailyResponse.data);
@@ -55,7 +58,7 @@ function AdminDashboard() {
     if (!monthYear) return;
     try {
       const [year, month] = monthYear.split('-');
-      const response = await axios.get('/api/bookings/stats/monthly', {
+      const response = await axios.get(`${API_URL}/api/bookings/stats/monthly`, {
         params: { month, year }
       });
       setMonthlyRevenue(response.data);
@@ -72,7 +75,7 @@ function AdminDashboard() {
       fetchMonthlyRevenue(value);
     } else {
       // Nếu không chọn tháng, lấy lại dữ liệu tất cả các tháng
-      axios.get('/api/bookings/stats/monthly')
+      axios.get(`${API_URL}/api/bookings/stats/monthly`)
         .then(response => setMonthlyRevenue(response.data))
         .catch(err => setError(err.response?.data?.message || 'Lỗi khi tải dữ liệu.'));
     }

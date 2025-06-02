@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom";
 import { FaSearch, FaFilter } from "react-icons/fa";
 import "./../css/admin-bookings.css";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 function AdminBookings() {
   const [bookings, setBookings] = useState([]);
   const [filteredBookings, setFilteredBookings] = useState([]);
@@ -38,7 +40,7 @@ function AdminBookings() {
           throw new Error("Bạn cần đăng nhập để xem danh sách đặt phòng");
         }
 
-        const response = await axios.get("/api/bookings", {
+        const response = await axios.get(`${API_URL}/api/bookings`, {
           headers: {
             Authorization: `Bearer ${userInfo.token}`,
           },
@@ -94,7 +96,7 @@ function AdminBookings() {
       }
 
       await axios.put(
-        `/api/bookings/${bookingId}/confirm`,
+        `${API_URL}/api/bookings/${bookingId}/confirm`,
         {},
         {
           headers: {
@@ -123,7 +125,7 @@ function AdminBookings() {
       }
 
       await axios.put(
-        `/api/bookings/${bookingId}/cancel`,
+        `${API_URL}/api/bookings/${bookingId}/cancel`,
         {
           cancelReason: "Hủy bởi admin"
         },

@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../css/AdminRewards.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 function AdminRewards() {
   const [rewards, setRewards] = useState([]);
   const [formData, setFormData] = useState({
@@ -19,7 +22,7 @@ function AdminRewards() {
     const fetchRewards = async () => {
       try {
         const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-        const response = await axios.get('/api/rewards/admin', {
+        const response = await axios.get(`${API_URL}/api/rewards/admin`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
         setRewards(response.data.rewards);
@@ -34,7 +37,7 @@ function AdminRewards() {
   const handleCreate = async () => {
     try {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      await axios.post('/api/rewards', formData, {
+      await axios.post(`${API_URL}/api/rewards`, formData, {
         headers: { Authorization: `Bearer ${userInfo.token}` },
       });
       alert('Tạo ưu đãi thành công');
@@ -45,7 +48,7 @@ function AdminRewards() {
         pointsRequired: 0,
         voucherCode: '',
       });
-      const response = await axios.get('/api/rewards/admin', {
+      const response = await axios.get(`${API_URL}/api/rewards/admin`, {
         headers: { Authorization: `Bearer ${userInfo.token}` },
       });
       setRewards(response.data.rewards);
@@ -70,7 +73,7 @@ function AdminRewards() {
   const handleUpdate = async () => {
     try {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      await axios.put(`/api/rewards/${editId}`, formData, {
+      await axios.put(`${API_URL}/api/rewards/${editId}`, formData, {
         headers: { Authorization: `Bearer ${userInfo.token}` },
       });
       alert('Cập nhật ưu đãi thành công');
@@ -83,7 +86,7 @@ function AdminRewards() {
         voucherCode: '',
       });
       setEditId(null);
-      const response = await axios.get('/api/rewards/admin', {
+      const response = await axios.get(`${API_URL}/api/rewards/admin`, {
         headers: { Authorization: `Bearer ${userInfo.token}` },
       });
       setRewards(response.data.rewards);
@@ -97,7 +100,7 @@ function AdminRewards() {
     if (window.confirm('Bạn có chắc muốn xóa ưu đãi này?')) {
       try {
         const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-        await axios.delete(`/api/rewards/${id}`, {
+        await axios.delete(`${API_URL}/api/rewards/${id}`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
         alert('Xóa ưu đãi thành công');

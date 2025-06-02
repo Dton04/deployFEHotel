@@ -6,6 +6,8 @@ import { Modal, Button, Form, Table } from 'react-bootstrap';
 import moment from 'moment';
 import '../css/AdminDiscounts.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const AdminDiscounts = () => {
   const [discounts, setDiscounts] = useState([]);
   const [rooms, setRooms] = useState([]);
@@ -36,7 +38,7 @@ const AdminDiscounts = () => {
 
   const fetchDiscounts = async () => {
     try {
-      const response = await axios.get('/api/discounts/admin', {
+      const response = await axios.get(`${API_URL}/api/discounts/admin`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setDiscounts(response.data);
@@ -47,7 +49,7 @@ const AdminDiscounts = () => {
 
   const fetchRooms = async () => {
     try {
-      const response = await axios.get('/api/rooms/getallrooms', {
+      const response = await axios.get(`${API_URL}/api/rooms/getallrooms`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setRooms(response.data);
@@ -163,12 +165,12 @@ const AdminDiscounts = () => {
       if (data.type !== 'member') delete data.membershipLevel;
 
       if (selectedDiscount) {
-        await axios.put(`/api/discounts/${selectedDiscount._id}`, data, {
+        await axios.put(`${API_URL}/api/discounts/${selectedDiscount._id}`, data, {
           headers: { Authorization: `Bearer ${token}` },
         });
         toast.success('Cập nhật khuyến mãi thành công');
       } else {
-        await axios.post('/api/discounts', data, {
+        await axios.post(`${API_URL}/api/discounts`, data, {
           headers: { Authorization: `Bearer ${token}` },
         });
         toast.success('Tạo khuyến mãi thành công');
@@ -192,7 +194,7 @@ const AdminDiscounts = () => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`/api/discounts/${deleteDiscountId}`, {
+      await axios.delete(`${API_URL}/api/discounts/${deleteDiscountId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success('Xóa khuyến mãi thành công');

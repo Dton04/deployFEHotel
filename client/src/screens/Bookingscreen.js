@@ -188,7 +188,7 @@ const fetchSuggestions = useCallback(async (roomId, roomType) => {
       };
       const identifiers = [discountCode];
 
-      const response = await axios.post("/api/discounts/apply", {
+      const response = await axios.post(`${API_URL}/api/discounts/apply`, {
         bookingData,
         identifiers,
       });
@@ -222,7 +222,7 @@ const fetchSuggestions = useCallback(async (roomId, roomType) => {
     if (bookingId && paymentStatus === "pending" && bankInfo) {
       interval = setInterval(async () => {
         try {
-          const response = await axios.get(`/api/bookings/${bookingId}/payment-deadline`);
+          const response = await axios.get(`${API_URL}/api/bookings/${bookingId}/payment-deadline`);
           const { timeRemaining: remaining, expired } = response.data;
           setTimeRemaining(remaining);
           setPaymentExpired(expired);
@@ -259,7 +259,7 @@ const fetchSuggestions = useCallback(async (roomId, roomType) => {
       setPointsEarned(null);
 
       // Gửi yêu cầu đặt phòng với danh sách dịch vụ
-      const bookingResponse = await axios.post("/api/bookings/bookroom", {
+      const bookingResponse = await axios.post(`${API_URL}/api/bookings/bookroom`, {
         roomid,
         ...data,
         diningServices: selectedServices, // Gửi danh sách dịch vụ được chọn
@@ -293,7 +293,7 @@ const fetchSuggestions = useCallback(async (roomId, roomType) => {
         const orderInfo = `Thanh toán đặt phòng ${room.name}`;
         const amount = (discountResult?.totalAmount || room.rentperday || 50000) + calculateServiceCost();
 
-        const momoResponse = await axios.post("/api/momo/create-payment", {
+        const momoResponse = await axios.post(`${API_URL}/api/momo/create-payment`, {
           amount: amount.toString(),
           orderId,
           orderInfo,
@@ -320,7 +320,7 @@ const fetchSuggestions = useCallback(async (roomId, roomType) => {
         const orderInfo = `Thanh toán đặt phòng ${room.name}`;
         const amount = (discountResult?.totalAmount || room.rentperday || 50000) + calculateServiceCost();
 
-        const vnpayResponse = await axios.post("/api/vnpay/create-payment", {
+        const vnpayResponse = await axios.post(`${API_URL}/api/vnpay/create-payment`, {
           amount: amount.toString(),
           orderId,
           orderInfo,
@@ -353,7 +353,7 @@ const fetchSuggestions = useCallback(async (roomId, roomType) => {
 
         // Kiểm tra và tích điểm nếu thanh toán hoàn tất
         if (data.paymentMethod !== "bank_transfer") {
-          const bookingCheck = await axios.get(`/api/bookings/${bookingResponse.data.booking._id}`);
+          const bookingCheck = await axios.get(`${API_URL}/api/bookings/${bookingResponse.data.booking._id}`);
           if (bookingCheck.data.status === "confirmed" && bookingCheck.data.paymentStatus === "paid") {
             const pointsResult = await accumulatePoints(bookingResponse.data.booking._id);
             if (pointsResult.success) {
@@ -399,7 +399,7 @@ const fetchSuggestions = useCallback(async (roomId, roomType) => {
     if (!bookingId) return;
     try {
       setLoading(true);
-      const response = await axios.put(`/api/bookings/${bookingId}/confirm`);
+      const response = await axios.put(`${API_URL}/api/bookings/${bookingId}/confirm`);
       setPaymentStatus("paid");
 
       // Tích điểm sau khi xác nhận thanh toán
@@ -435,7 +435,7 @@ const fetchSuggestions = useCallback(async (roomId, roomType) => {
     if (!bookingId) return;
     try {
       setLoading(true);
-      const response = await axios.get(`/api/bookings/${bookingId}`);
+      const response = await axios.get(`${API_URL}/api/bookings/${bookingId}`);
       setPaymentStatus(response.data.paymentStatus);
 
       if (response.data.paymentStatus === "paid" && response.data.status === "confirmed") {
