@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../css/auth.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 function Registerscreen() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -36,7 +39,7 @@ function Registerscreen() {
 
     try {
       setLoading(true);
-      const response = await axios.post('/api/users/register', { 
+      const response = await axios.post(`${API_URL}/api/users/register`, { 
         name, 
         email, 
         password, 

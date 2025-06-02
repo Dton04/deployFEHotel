@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../css/loginscreen.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,7 +25,7 @@ function LoginScreen() {
 
     try {
       setLoading(true);
-      const response = await axios.post('/api/users/login', { email, password });
+      const response = await axios.post(`${API_URL}/api/users/login`, { email, password });
       const userData = response.data;
       // Lưu thông tin người dùng
       localStorage.setItem('userInfo', JSON.stringify(userData));
@@ -58,14 +60,14 @@ function LoginScreen() {
     setLoading(true);
     setError('');
     setSuccess('');
-    window.location.href = 'http://localhost:5000/api/users/google';
+    window.location.href = `${API_URL}/api/users/google`;
   };
 
   const handleFacebookLogin = () => {
     setLoading(true);
     setError('');
     setSuccess('');
-    window.location.href = 'http://localhost:5000/api/users/facebook';
+    window.location.href = `${API_URL}/api/users/facebook`;
   };
 
   return (
