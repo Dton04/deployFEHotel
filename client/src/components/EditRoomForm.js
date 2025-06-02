@@ -4,6 +4,9 @@ import axios from 'axios';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import '../css/CreateRoomForm.css'; // Reuse CSS từ CreateRoomForm
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 const EditRoomForm = () => {
   const navigate = useNavigate();
   const { id } = useParams();
