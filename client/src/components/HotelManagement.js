@@ -30,7 +30,7 @@ function HotelManagement() {
   // Lấy danh sách khách sạn
   const fetchHotels = async () => {
     try {
-      const response = await axiosInstance.get(`${API_URL}/hotels`);
+      const response = await axiosInstance.get(`${API_URL}/api/hotels`);
       setHotels(response.data);
     } catch (err) {
       setError('Lỗi khi lấy danh sách khách sạn');
@@ -40,7 +40,7 @@ function HotelManagement() {
   // Lấy danh sách khu vực
   const fetchRegions = async () => {
     try {
-      const response = await axiosInstance.get(`${API_URL}/regions`);
+      const response = await axiosInstance.get(`${API_URL}/api/regions`);
       setRegions(response.data);
     } catch (err) {
       setError('Lỗi khi lấy danh sách khu vực');
@@ -65,7 +65,7 @@ function HotelManagement() {
     if (!window.confirm('Bạn có chắc muốn xóa ảnh này?')) return;
     try {
       const imgId = imageUrl.split('/').pop();
-      await axiosInstance.delete(`${API_URL}/hotels/${editId}/images/${imgId}`);
+      await axiosInstance.delete(`${API_URL}/api/hotels/${editId}/images/${imgId}`);
       setFormData({
         ...formData,
         imageurls: formData.imageurls.filter((url) => url !== imageUrl),
@@ -82,11 +82,11 @@ function HotelManagement() {
       let savedHotel;
       const payload = { ...formData, rooms: formData.rooms || [] };
       if (isEditing) {
-        const response = await axiosInstance.put(`${API_URL}/hotels/${editId}`, payload);
+        const response = await axiosInstance.put(`${API_URL}/api/hotels/${editId}`, payload);
         savedHotel = response.data.hotel;
         setSuccess('Cập nhật khách sạn thành công');
       } else {
-        const response = await axiosInstance.post(`${API_URL}/hotels`, payload);
+        const response = await axiosInstance.post(`${API_URL}/api/hotels`, payload);
         savedHotel = response.data.hotel;
         setSuccess('Thêm khách sạn thành công');
       }
@@ -94,7 +94,7 @@ function HotelManagement() {
       if (newImages.length > 0) {
         const formDataImages = new FormData();
         newImages.forEach((image) => formDataImages.append('images', image));
-        const imageResponse = await axiosInstance.post(`${API_URL}/hotels/${savedHotel._id}/images`, formDataImages, {
+        const imageResponse = await axiosInstance.post(`${API_URL}/api/hotels/${savedHotel._id}/images`, formDataImages, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
         setFormData((prev) => ({
@@ -145,7 +145,7 @@ function HotelManagement() {
   const handleDelete = async (id) => {
     if (window.confirm('Bạn có chắc muốn xóa khách sạn này?')) {
       try {
-        await axiosInstance.delete(`${API_URL}/hotels/${id}`);
+        await axiosInstance.delete(`${API_URL}/api/hotels/${id}`);
         setSuccess('Xóa khách sạn thành công');
         fetchHotels();
       } catch (err) {
