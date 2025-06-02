@@ -5,6 +5,9 @@ import RatingForm from "../RatingForm";
 import axios from "axios";
 import "../../css/testimonial.css";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 function Testimonial() {
   const [reviews, setReviews] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -38,7 +41,7 @@ function Testimonial() {
       try {
         setLoading(true);
         setError(null);
-        const response = await axios.get("/api/hotels");
+        const response = await axios.get(`${API_URL}/api/hotels`);
         setHotels(response.data);
         const { hotelId } = getQueryParams();
         if (response.data.length > 0) {
@@ -67,7 +70,7 @@ function Testimonial() {
       try {
         setLoading(true);
         setError(null);
-        const response = await axios.get(`/api/hotels/${selectedHotel}`);
+        const response = await axios.get(`${API_URL}/api/hotels/${selectedHotel}`);
         const hotelRooms = response.data.hotel.rooms || [];
         setRooms(hotelRooms);
         // Đặt phòng đầu tiên làm mặc định (tùy chọn)
@@ -111,11 +114,11 @@ function Testimonial() {
         return;
       }
 
-      const hotelResponse = await axios.get(`/api/hotels/${selectedHotel}`);
+      const hotelResponse = await axios.get(`${API_URL}/api/hotels/${selectedHotel}`);
       const hotelRooms = hotelResponse.data.hotel.rooms;
       const roomIds = hotelRooms.map(room => room._id);
 
-      const response = await axios.get(`/api/bookings/check`, {
+      const response = await axios.get(`${API_URL}/api/bookings/check`, {
         params: {
           email: userEmail,
           roomId: JSON.stringify({ $in: roomIds }),
@@ -170,7 +173,7 @@ function Testimonial() {
       try {
         setLoading(true);
         setError(null);
-        const response = await axios.get("/api/reviews", {
+        const response = await axios.get(`${API_URL}/api/reviews`, {
           params: { hotelId: selectedHotel },
         });
         setReviews(response.data.reviews || []);
@@ -193,7 +196,7 @@ function Testimonial() {
     const fetchAverageRating = async () => {
       if (!selectedHotel) return;
       try {
-        const response = await axios.get("/api/reviews/average", {
+        const response = await axios.get(`${API_URL}/api/reviews/average`, {
           params: { hotelId: selectedHotel },
         });
         setAverageRating(response.data);
@@ -254,17 +257,17 @@ function Testimonial() {
       setLoading(true);
       setSubmitStatus(null);
 
-      await axios.post("/api/reviews", formData);
+      await axios.post(`${API_URL}/api/reviews`, formData);
 
       setSubmitStatus({ type: "success", message: "Gửi đánh giá thành công!" });
       setShowRatingForm(false);
 
-      const updatedReviews = await axios.get("/api/reviews", {
+      const updatedReviews = await axios.get(`${API_URL}/api/reviews`, {
         params: { hotelId: selectedHotel },
       });
       setReviews(updatedReviews.data.reviews || []);
 
-      const updatedAverage = await axios.get("/api/reviews/average", {
+      const updatedAverage = await axios.get(`${API_URL}/api/reviews/average`, {
         params: { hotelId: selectedHotel },
       });
       setAverageRating(updatedAverage.data);
