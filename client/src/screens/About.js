@@ -5,6 +5,8 @@ import Banner from "../components/Banner";
 import BookingForm from "../components/BookingForm";
 import axios from "axios";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 function About() {
   const [stats, setStats] = useState({
     hotel: 0,
@@ -21,15 +23,15 @@ function About() {
         setError(null);
 
         // // Fetch rooms count
-        // const roomsResponse = await axios.get("http://localhost:5000/api/rooms/getallrooms");
+        // const roomsResponse = await axios.get(`${API_URL}/api/rooms/getallrooms`);
         // const roomsCount = roomsResponse.data.length;
 
         // Fetch hotels count (optional, if you want to display hotels instead of rooms)
-        const hotelsResponse = await axios.get("http://localhost:5000/api/hotels");
+        const hotelsResponse = await axios.get(`${API_URL}/api/hotels`);
         const hotelsCount = hotelsResponse.data.length;
 
         // Fetch staff count (requires authentication)
-        const staffResponse = await axios.get("http://localhost:5000/api/users/staff", {
+        const staffResponse = await axios.get(`${API_URL}/api/users/staff`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming token is stored in localStorage
           },
@@ -37,7 +39,7 @@ function About() {
         const staffCount = staffResponse.data.length;
 
         // Fetch users count (requires authentication)
-        const usersResponse = await axios.get("http://localhost:5000/api/users/allusers", {
+        const usersResponse = await axios.get(`${API_URL}/api/users/allusers`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },

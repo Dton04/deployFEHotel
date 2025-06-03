@@ -3,6 +3,9 @@ import axiosInstance from './axiosInstance';
 import { useParams } from 'react-router-dom';
 import '../css/hotelRoomManagement.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 function HotelRoomManagement() {
   const { hotelId } = useParams();
   const [hotel, setHotel] = useState(null); // Thêm state để lưu thông tin khách sạn
@@ -27,7 +30,7 @@ function HotelRoomManagement() {
 
   const fetchHotelAndRooms = async () => {
     try {
-      const response = await axiosInstance.get(`/hotels/${hotelId}/rooms`);
+      const response = await axiosInstance.get(`${API_URL}/api/hotels/${hotelId}/rooms`);
       setHotel(response.data.hotel); // Lưu thông tin khách sạn
       setRooms(response.data.rooms); // Lưu danh sách phòng
     } catch (err) {
@@ -46,7 +49,7 @@ function HotelRoomManagement() {
 
   const handleEdit = async (room) => {
     try {
-      const response = await axiosInstance.get(`/rooms/images/${room._id}`);
+      const response = await axiosInstance.get(`${API_URL}/api/rooms/images/${room._id}`);
       setFormData({
         name: room.name,
         maxcount: room.maxcount,
@@ -71,7 +74,7 @@ function HotelRoomManagement() {
     if (!window.confirm('Bạn có chắc muốn xóa ảnh này?')) return;
     try {
       const imgId = imageUrl.split('/').pop();
-      await axiosInstance.delete(`/rooms/${editId}/images/${imgId}`);
+      await axiosInstance.delete(`${API_URL}/api/rooms/${editId}/images/${imgId}`);
       setFormData({
         ...formData,
         imageurls: formData.imageurls.filter((url) => url !== imageUrl),
@@ -88,18 +91,18 @@ function HotelRoomManagement() {
       const payload = { ...formData, hotelId };
       let savedRoom;
       if (isEditing) {
-        const response = await axiosInstance.put(`/rooms/${editId}`, payload);
+        const response = await axiosInstance.put(`${API_URL}/api/rooms/${editId}`, payload);
         savedRoom = response.data.room;
         setSuccess('Cập nhật phòng thành công');
       } else {
-        const response = await axiosInstance.post('/rooms', payload);
+        const response = await axiosInstance.post(`${API_URL}/api/rooms`, payload);
         savedRoom = response.data.room;
         setSuccess('Thêm phòng thành công');
       }
       if (newImages.length > 0) {
         const formDataImages = new FormData();
         newImages.forEach((image) => formDataImages.append('images', image));
-        const imageResponse = await axiosInstance.post(`/rooms/${savedRoom._id}/images`, formDataImages, {
+        const imageResponse = await axiosInstance.post(`${API_URL}/api/rooms/${savedRoom._id}/images`, formDataImages, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
         setFormData((prev) => ({
@@ -131,7 +134,7 @@ function HotelRoomManagement() {
   const handleDelete = async (id) => {
     if (window.confirm('Bạn có chắc muốn xóa phòng này?')) {
       try {
-        await axiosInstance.delete(`/rooms/${id}?hotelId=${hotelId}`);
+        await axiosInstance.delete(`${API_URL}/api/rooms/${id}?hotelId=${hotelId}`);
         setSuccess('Xóa phòng thành công');
         fetchHotelAndRooms();
       } catch (err) {

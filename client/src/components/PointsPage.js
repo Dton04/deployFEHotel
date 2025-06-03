@@ -3,6 +3,9 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../css/points.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 function PointsPage() {
   const [user, setUser] = useState(null);
   const [points, setPoints] = useState(0);
@@ -31,7 +34,7 @@ function PointsPage() {
       const config = {
         headers: { Authorization: `Bearer ${userInfo.token}` },
       };
-      const response = await axios.get('/api/users/points', config);
+      const response = await axios.get(`${API_URL}/api/users/points`, config);
       setPoints(response.data.points);
       setTransactions(response.data.recentTransactions);
     } catch (error) {
@@ -45,7 +48,7 @@ function PointsPage() {
       const config = {
         headers: { Authorization: `Bearer ${userInfo.token}` },
       };
-      const response = await axios.get(`/api/bookings/history/${userInfo._id}`, config);
+      const response = await axios.get(`${API_URL}/api/bookings/history/${userInfo._id}`, config);
       const eligibleBookings = response.data.filter(
         (booking) => booking.paymentStatus === 'pending' && booking.status !== 'canceled'
       );
@@ -72,7 +75,7 @@ function PointsPage() {
       };
 
       // Kiểm tra trạng thái booking trước khi checkout
-      const bookingCheck = await axios.get(`/api/bookings/${selectedBooking}`, config);
+      const bookingCheck = await axios.get(`${API_URL}/api/bookings/${selectedBooking}`, config);
       if (bookingCheck.data.status !== 'confirmed' || bookingCheck.data.paymentStatus !== 'paid') {
         setError('Đặt phòng chưa đủ điều kiện để tích điểm');
         setLoading(false);
@@ -80,7 +83,7 @@ function PointsPage() {
       }
 
       const response = await axios.post(
-        '/api/bookings/checkout',
+        `${API_URL}/api/bookings/checkout`,
         { bookingId: selectedBooking },
         config
       );

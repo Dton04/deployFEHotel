@@ -9,6 +9,9 @@ import twitterIcon from '../assets/icons/x-icon.jpg';
 import instagramIcon from '../assets/icons/instagram-icon.png';
 import youtubeIcon from '../assets/icons/youtube-icon.jpg';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -26,7 +29,7 @@ function Navbar() {
       setUser(userInfo);
       try {
         const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-        const response = await axios.get('/api/users/points', config);
+        const response = await axios.get(`${API_URL}/api/users/points`, config);
         setPoints(response.data.points);
       } catch (error) {
         console.error('Lỗi khi lấy điểm:', error);
