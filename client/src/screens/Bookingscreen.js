@@ -12,7 +12,7 @@ import AlertMessage from "../components/AlertMessage";
 import { Carousel } from "react-bootstrap";
 
 
-const API_URL = process.env.REACT_APP_API_URL; 
+const API_URL = process.env.REACT_APP_API_URL;
 
 
 // Định nghĩa danh sách dịch vụ có sẵn
@@ -110,68 +110,68 @@ function Bookingscreen() {
 
   // Hàm lấy dữ liệu phòng
   const fetchRoomData = useCallback(async () => {
-  try {
-    setLoading(true);
-    const { data } = await axios.post(`${API_URL}/api/rooms/getroombyid`, { roomid }); // Sửa
-    setRoom(data);
-    setValue("roomType", data.type || "");
-    if (data.availabilityStatus !== "available") {
-      await fetchSuggestions(data._id, data.type);
+    try {
+      setLoading(true);
+      const { data } = await axios.post(`${API_URL}/api/rooms/getroombyid`, { roomid }); // Sửa
+      setRoom(data);
+      setValue("roomType", data.type || "");
+      if (data.availabilityStatus !== "available") {
+        await fetchSuggestions(data._id, data.type);
+      }
+      const checkin = new Date(data.checkin || new Date());
+      const checkout = new Date(data.checkout || new Date());
+      const days = Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
+      setTotalAmount(data.rentperday * days);
+    } catch (error) {
+      setError(true);
+    } finally {
+      setLoading(false);
     }
-    const checkin = new Date(data.checkin || new Date());
-    const checkout = new Date(data.checkout || new Date());
-    const days = Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
-    setTotalAmount(data.rentperday * days);
-  } catch (error) {
-    setError(true);
-  } finally {
-    setLoading(false);
-  }
-}, [roomid, setValue]);
+  }, [roomid, setValue]);
 
-const fetchSuggestions = useCallback(async (roomId, roomType) => {
-  try {
-    setLoadingSuggestions(true);
-    const response = await axios.get(`${API_URL}/api/rooms/suggestions`, { // Sửa
-      params: { roomId, roomType },
-    });
-    setSuggestions(response.data);
-  } catch (error) {
-    console.error("Lỗi khi lấy phòng gợi ý:", error);
-  } finally {
-    setLoadingSuggestions(false);
-  }
-}, []);
+  const fetchSuggestions = useCallback(async (roomId, roomType) => {
+    try {
+      setLoadingSuggestions(true);
+      const response = await axios.get(`${API_URL}/api/rooms/suggestions`, { // Sửa
+        params: { roomId, roomType },
+      });
+      setSuggestions(response.data);
+    } catch (error) {
+      console.error("Lỗi khi lấy phòng gợi ý:", error);
+    } finally {
+      setLoadingSuggestions(false);
+    }
+  }, []);
 
   const accumulatePoints = useCallback(async (bookingId) => {
-  try {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    if (!userInfo || !userInfo.token) {
-      return { success: false, message: "Vui lòng đăng nhập để tích điểm" };
+    try {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      if (!userInfo || !userInfo.token) {
+        return { success: false, message: "Vui lòng đăng nhập để tích điểm" };
+      }
+
+      const config = {
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      };
+
+      const bookingCheck = await axios.get(`${API_URL}/api/bookings/${bookingId}`, config); // Sửa
+      if (bookingCheck.data.status !== "confirmed" || bookingCheck.data.paymentStatus !== "paid") {
+        return { success: false, message: "Đặt phòng chưa đủ điều kiện để tích điểm" };
+      }
+
+      const response = await axios.post(`${API_URL}/api/bookings/checkout`, { bookingId }, config); // Sửa
+      return {
+        success: true,
+        pointsEarned: response.data.pointsEarned,
+        totalPoints: response.data.totalPoints,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.response?.data?.message || "Lỗi khi tích điểm",
+      };
     }
-
-    const config = {
-      headers: { Authorization: `Bearer ${userInfo.token}` },
-    };
-
-    const bookingCheck = await axios.get(`${API_URL}/api/bookings/${bookingId}`, config); // Sửa
-    if (bookingCheck.data.status !== "confirmed" || bookingCheck.data.paymentStatus !== "paid") {
-      return { success: false, message: "Đặt phòng chưa đủ điều kiện để tích điểm" };
-    }
-
-    const response = await axios.post(`${API_URL}/api/bookings/checkout`, { bookingId }, config); // Sửa
-    return {
-      success: true,
-      pointsEarned: response.data.pointsEarned,
-      totalPoints: response.data.totalPoints,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      message: error.response?.data?.message || "Lỗi khi tích điểm",
-    };
-  }
-}, []);
+  }, []);
 
   // Hàm áp dụng mã giảm giá
   const applyDiscountCode = async () => {
@@ -249,6 +249,14 @@ const fetchSuggestions = useCallback(async (roomId, roomType) => {
   }, [bookingId, paymentStatus, bankInfo]);
 
   const onSubmit = async (data) => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    if (!userInfo || !userInfo.token) {
+      setBookingStatus({
+        type: "error",
+        message: "Bạn cần đăng nhập để thực hiện đặt phòng.",
+      });
+      return;
+    }
     try {
       setLoading(true);
       setBookingStatus(null);
@@ -616,6 +624,12 @@ const fetchSuggestions = useCallback(async (roomId, roomType) => {
               {renderPaymentStatus()}
               {renderBankInfo()}
               <div className="booking-screen-wrapper">
+                {!localStorage.getItem("userInfo") && (
+                  <div className="alert alert-warning text-center">
+                    Vui lòng <a href="/login">đăng nhập</a> để đặt phòng.
+                  </div>
+                )}
+
                 <form className="booking-screen" onSubmit={handleSubmit(onSubmit)}>
                   <div className="row">
                     <div className="col-md-6">
@@ -823,7 +837,7 @@ const fetchSuggestions = useCallback(async (roomId, roomType) => {
                     <button
                       type="submit"
                       className="btn btn-book-now"
-                      disabled={loading || room.availabilityStatus !== "available"}
+                      disabled={loading || room.availabilityStatus !== "available" || !localStorage.getItem("userInfo")}
                     >
                       {loading ? "Đang xử lý..." : "ĐẶT PHÒNG NGAY"}
                     </button>

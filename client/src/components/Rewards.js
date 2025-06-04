@@ -214,14 +214,16 @@ const Rewards = () => {
     fetchVouchers();
   }, []);
 
-  if (loading) {
+   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-          className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full"
-        />
+      <div className="loading-container">
+        <div className="loading-content">
+          <div className="loading-spinner"></div>
+          <div className="loading-text">
+            <h3>Đang tải thông tin ưu đãi...</h3>
+            <p>Vui lòng đợi trong giây lát</p>
+          </div>
+        </div>
       </div>
     );
   }
